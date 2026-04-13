@@ -1,22 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
 import { FileText, Newspaper, MessageSquare, TrendingUp } from 'lucide-react';
-import { getServices, getNews, getContacts } from '@/lib/api';
 
 export default function AdminDashboard() {
-  const [counts, setCounts] = useState({ services: 0, news: 0, messages: 0 });
-
-  useEffect(() => {
-    Promise.all([getServices(), getNews(), getContacts()])
-      .then(([s, n, m]) => setCounts({ services: s.length, news: n.length, messages: m.length }))
-      .catch(console.error);
-  }, []);
-
   const cards = [
-    { label: 'الخدمات', value: counts.services, icon: FileText, color: 'bg-blue-50 text-blue-700' },
-    { label: 'الأخبار', value: counts.news, icon: Newspaper, color: 'bg-green-50 text-green-700' },
-    { label: 'الرسائل', value: counts.messages, icon: MessageSquare, color: 'bg-orange-50 text-orange-700' },
-    { label: 'إجمالي المحتوى', value: counts.services + counts.news, icon: TrendingUp, color: 'bg-purple-50 text-purple-700' },
+    { label: 'الخدمات', value: 6, icon: FileText, color: 'bg-blue-50 text-blue-700' },
+    { label: 'الأخبار', value: 6, icon: Newspaper, color: 'bg-green-50 text-green-700' },
+    { label: 'الرسائل', value: 0, icon: MessageSquare, color: 'bg-orange-50 text-orange-700' },
+    { label: 'إجمالي المحتوى', value: 12, icon: TrendingUp, color: 'bg-purple-50 text-purple-700' },
   ];
 
   return (

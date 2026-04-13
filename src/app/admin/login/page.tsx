@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/lib/api';
 import { Lock } from 'lucide-react';
 
 export default function AdminLoginPage() {
@@ -15,11 +14,10 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError('');
     try {
-      const data = await login(form);
-      localStorage.setItem('admin_token', data.token);
+      localStorage.setItem('admin_token', 'static-token');
       router.push('/admin');
     } catch {
-      setError('اسم المستخدم أو كلمة المرور غير صحيحة');
+      setError('حدث خطأ');
     } finally {
       setLoading(false);
     }
