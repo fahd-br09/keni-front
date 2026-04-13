@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --green-primary: #1a6b3c;
+  --green-light: #22c55e;
+  --green-dark: #14532d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', 'Cairo', 'Noto Sans Arabic', sans-serif;
+  direction: rtl;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+html[lang="fr"] body { direction: ltr; }
+
+.rtl { direction: rtl; }
+.ltr { direction: ltr; }
