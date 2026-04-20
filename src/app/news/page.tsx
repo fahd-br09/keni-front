@@ -3,69 +3,8 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { Calendar, ArrowLeft, Newspaper, Tag } from 'lucide-react';
-import { getNews } from '@/lib/api';
-import { API_URL } from '@/lib/utils';
-
-interface NewsItem {
-  _id: string;
-  titleAr: string;
-  contentAr: string;
-  image?: string;
-  category: string;
-  createdAt: string;
-}
-
-const FALLBACK_NEWS: NewsItem[] = [
-  {
-    _id: '1',
-    titleAr: 'انطلاق مشروع تهيئة الواجهة البحرية لمدينة القنيطرة',
-    contentAr: 'أعلنت بلدية القنيطرة عن انطلاق أشغال تهيئة الواجهة البحرية في إطار مخطط التنمية الحضرية للمدينة، بتكلفة إجمالية تبلغ 50 مليون درهم.',
-    category: 'مشاريع',
-    createdAt: '2026-04-10T10:00:00Z',
-    image: '/images/news1.jpg',   // ضع صورتك هنا
-  },
-  {
-    _id: '2',
-    titleAr: 'البلدية تطلق منصة رقمية لتتبع الطلبات الإدارية',
-    contentAr: 'في إطار مسيرة التحول الرقمي، أطلقت بلدية القنيطرة منصة إلكترونية متكاملة تتيح للمواطنين تتبع طلباتهم الإدارية في الوقت الفعلي.',
-    category: 'رقمنة',
-    createdAt: '2026-04-08T09:00:00Z',
-    image: '/images/news2.jpg',
-  },
-  {
-    _id: '3',
-    titleAr: 'حملة نظافة شاملة في أحياء المدينة',
-    contentAr: 'نظمت البلدية حملة نظافة واسعة النطاق شملت جميع أحياء المدينة بمشاركة المواطنين والجمعيات المدنية والسلطات المحلية.',
-    category: 'بيئة',
-    createdAt: '2026-04-05T08:00:00Z',
-    image: '/images/news3.jpg',
-  },
-  {
-    _id: '4',
-    titleAr: 'افتتاح حديقة عمومية جديدة بحي المسيرة',
-    contentAr: 'افتتحت بلدية القنيطرة حديقة عمومية جديدة بحي المسيرة تضم مساحات خضراء وملاعب للأطفال ومرافق للراحة والترفيه.',
-    category: 'تهيئة',
-    createdAt: '2026-04-02T11:00:00Z',
-    image: '/images/news4.jpg',
-  },
-  {
-    _id: '5',
-    titleAr: 'إعلان عن مباراة توظيف بالجماعة الحضرية',
-    contentAr: 'تعلن الجماعة الحضرية للقنيطرة عن فتح باب الترشيح لمباراة توظيف في عدة تخصصات إدارية وتقنية. آخر أجل للتقديم 30 أبريل 2026.',
-    category: 'إعلانات',
-    createdAt: '2026-03-28T10:00:00Z',
-    image: '/images/news5.jpg',
-  },
-  {
-    _id: '6',
-    titleAr: 'اجتماع المجلس الجماعي يصادق على ميزانية 2026',
-    contentAr: 'صادق المجلس الجماعي للقنيطرة في دورته العادية على ميزانية السنة المالية 2026 البالغة 320 مليون درهم، مع التركيز على مشاريع البنية التحتية.',
-    category: 'مجلس',
-    createdAt: '2026-03-20T14:00:00Z',
-    image: '/images/news6.jpg',
-  },
-];
+import { Calendar, ArrowLeft, Newspaper } from 'lucide-react';
+import { getNewsStore, type NewsItem } from '@/lib/store';
 
 const CATEGORY_COLORS: Record<string, string> = {
   'مشاريع':  'bg-blue-100 text-blue-700',
@@ -90,10 +29,8 @@ export default function NewsPage() {
   const [activeCategory, setActiveCategory] = useState('الكل');
 
   useEffect(() => {
-    getNews()
-      .then(setNews)
-      .catch(() => setNews(FALLBACK_NEWS))
-      .finally(() => setLoading(false));
+    setNews(getNewsStore());
+    setLoading(false);
   }, []);
 
   const categories = ['الكل', ...Array.from(new Set(news.map(n => n.category)))];
@@ -149,7 +86,7 @@ export default function NewsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   <div className={`h-64 md:h-auto flex items-center justify-center ${featured.image ? '' : 'bg-gradient-to-br from-green-700 to-emerald-600'}`}>
                     {featured.image
-                      ? <img src={featured.image.startsWith('/') ? featured.image : `${API_URL}${featured.image}`} alt={featured.titleAr} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ? <img src={featured.image} alt={featured.titleAr} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       : <Newspaper className="text-white/40" size={80} />
                     }
                   </div>
@@ -181,7 +118,7 @@ export default function NewsPage() {
                   className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all flex flex-col">
                   <div className={`h-44 flex items-center justify-center overflow-hidden ${item.image ? '' : 'bg-gradient-to-br from-green-700 to-emerald-600'}`}>
                     {item.image
-                      ? <img src={item.image.startsWith('/') ? item.image : `${API_URL}${item.image}`} alt={item.titleAr} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      ? <img src={item.image} alt={item.titleAr} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       : <Newspaper className="text-white/40" size={40} />
                     }
                   </div>

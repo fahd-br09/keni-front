@@ -5,19 +5,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { FileText, CheckCircle, Send, ArrowRight } from 'lucide-react';
-
-const SERVICES: Record<string, { titleAr: string; descriptionAr: string; requiredDocuments: string[] }> = {
-  '1': { titleAr: 'شهادة الإقامة', descriptionAr: 'استخراج شهادة الإقامة إلكترونياً دون الحاجة للتنقل', requiredDocuments: ['بطاقة التعريف الوطنية', 'عقد الكراء أو وثيقة الملكية', 'طلب مكتوب'] },
-  '2': { titleAr: 'رخصة البناء', descriptionAr: 'تقديم طلب الحصول على رخصة البناء أو التوسعة', requiredDocuments: ['تصميم معماري معتمد', 'عقد الملكية', 'بطاقة التعريف الوطنية', 'رسم الوضعية'] },
-  '3': { titleAr: 'خدمات الحالة المدنية', descriptionAr: 'استخراج وثائق الحالة المدنية كعقود الازدياد والزواج', requiredDocuments: ['بطاقة التعريف الوطنية', 'طلب مكتوب'] },
-  '4': { titleAr: 'الشكاوى والمقترحات', descriptionAr: 'تقديم شكاوى أو مقترحات لتحسين الخدمات البلدية', requiredDocuments: ['بطاقة التعريف الوطنية'] },
-  '5': { titleAr: 'تسوية الوضعية الضريبية', descriptionAr: 'الاستفسار عن الوضعية الجبائية وتسوية المستحقات', requiredDocuments: ['بطاقة التعريف الوطنية', 'آخر إشعار ضريبي'] },
-  '6': { titleAr: 'رخصة الاستغلال التجاري', descriptionAr: 'طلب رخصة فتح محل تجاري أو تجديدها', requiredDocuments: ['بطاقة التعريف الوطنية', 'عقد الكراء', 'تصريح بالنشاط التجاري'] },
-};
+import { getServicesStore } from '@/lib/store';
 
 export default function ServiceDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const service = SERVICES[id] ?? null;
+  const service = getServicesStore().find(s => s._id === id) ?? null;
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sent, setSent] = useState(false);
 

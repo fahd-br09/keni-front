@@ -1,50 +1,44 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Plus, Pencil, Trash2, X } from 'lucide-react';
-import { getNews, createNews, updateNews, deleteNews } from '@/lib/api';
+import { getNewsStore, addNews, updateNewsItem, deleteNewsItem, type NewsItem } from '@/lib/store';
 
-interface NewsItem {
-  _id: string;
-  titleAr: string;
-  contentAr: string;
-  category: string;
-  createdAt: string;
-}
-
-const empty = { titleAr: '', contentAr: '', category: 'عام' };
+const empty = { titleAr: '', contentAr: '', category: 'عام', image: '' };
 
 export default function AdminNewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<NewsItem | null>(null);
   const [form, setForm] = useState(empty);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const load = () => getNews().then(setNews).catch(console.error);
+  const load = () => setNews(getNewsStore());
   useEffect(() => { load(); }, []);
 
-  const openCreate = () => { setEditing(null); setForm(empty); setImageFile(null); setModal(true); };
-  const openEdit = (n: NewsItem) => { setEditing(n); setForm({ titleAr: n.titleAr, contentAr: n.contentAr, category: n.category }); setImageFile(null); setModal(true); };
+  const openCreate = () => { setEditing(null); setForm(empty); setModal(true); };
+  const openEdit = (n: NewsItem) => {
+    setEditing(n);
+    setForm({ titleAr: n.titleAr, contentAr: n.contentAr, category: n.category, image: n.image || '' });
+    setModal(true);
+  };
 
-  const handleSave = async () => {
-    const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-    if (imageFile) fd.append('image', imageFile);
-    if (editing) await updateNews(editing._id, fd);
-    else await createNews(fd);
+  const handleSave = () => {
+    if (!form.titleAr.trim()) return;
+    if (editing) updateNewsItem(editing._id, form);
+    else addNews(form);
     setModal(false);
     load();
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm('هل أنت متأكد من الحذف؟')) { await deleteNews(id); load(); }
+  const handleDelete = (id: string) => {
+    if (confirm('هل أنت متأكد من الحذف؟')) { deleteNewsItem(id); load(); }
   };
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-gray-900">إدارة الأخبار</h1>
-        <button onClick={openCreate} className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-green-800 transition-colors">
+        <button onClick={openCreate}
+          className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-green-800 transition-colors">
           <Plus size={16} /> إضافة خبر
         </button>
       </div>
@@ -63,8 +57,12 @@ export default function AdminNewsPage() {
             {news.map(n => (
               <tr key={n._id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3 font-medium text-gray-900">{n.titleAr}</td>
-                <td className="px-4 py-3 hidden md:table-cell text-gray-500">{n.category}</td>
-                <td className="px-4 py-3 hidden md:table-cell text-gray-400">{new Date(n.createdAt).toLocaleDateString('ar-MA')}</td>
+                <td className="px-4 py-3 hidden md:table-cell">
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{n.category}</span>
+                </td>
+                <td className="px-4 py-3 hidden md:table-cell text-gray-400 text-xs">
+                  {new Date(n.createdAt).toLocaleDateString('fr-MA')}
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <button onClick={() => openEdit(n)} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"><Pencil size={15} /></button>
@@ -85,18 +83,19 @@ export default function AdminNewsPage() {
               <h2 className="font-bold text-gray-900">{editing ? 'تعديل الخبر' : 'إضافة خبر جديد'}</h2>
               <button onClick={() => setModal(false)} className="p-1.5 rounded-lg hover:bg-gray-100"><X size={18} /></button>
             </div>
-            <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
-              <input placeholder="عنوان الخبر *" value={form.titleAr} onChange={e => setForm(p => ({ ...p, titleAr: e.target.value }))}
+            <div className="p-5 space-y-3 max-h-[70vh] overflow-y-auto">
+              <input placeholder="عنوان الخبر *" value={form.titleAr}
+                onChange={e => setForm(p => ({ ...p, titleAr: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
-              <input placeholder="التصنيف" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
+              <input placeholder="التصنيف (مشاريع، بيئة، إعلانات...)" value={form.category}
+                onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
-              <textarea placeholder="محتوى الخبر *" rows={5} value={form.contentAr} onChange={e => setForm(p => ({ ...p, contentAr: e.target.value }))}
+              <input placeholder="مسار الصورة (مثال: /images/news1.jpg)" value={form.image}
+                onChange={e => setForm(p => ({ ...p, image: e.target.value }))}
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <textarea placeholder="محتوى الخبر *" rows={5} value={form.contentAr}
+                onChange={e => setForm(p => ({ ...p, contentAr: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" />
-              <div>
-                <label className="text-sm text-gray-600 block mb-1">صورة الخبر</label>
-                <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] || null)}
-                  className="w-full text-sm text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 file:text-sm" />
-              </div>
             </div>
             <div className="p-5 border-t border-gray-100 flex gap-3 justify-end">
               <button onClick={() => setModal(false)} className="px-4 py-2 rounded-xl text-sm text-gray-600 hover:bg-gray-100">إلغاء</button>

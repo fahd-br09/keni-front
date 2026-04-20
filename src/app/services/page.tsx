@@ -3,25 +3,8 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { FileText, ArrowLeft, Search, Building2, Users, Phone, MapPin, ClipboardList, Home } from 'lucide-react';
-import { getServices } from '@/lib/api';
-
-interface Service {
-  _id: string;
-  titleAr: string;
-  descriptionAr: string;
-  icon: string;
-  category: string;
-}
-
-const FALLBACK_SERVICES: Service[] = [
-  { _id: '1', titleAr: 'شهادة الإقامة', descriptionAr: 'استخراج شهادة الإقامة إلكترونياً دون الحاجة للتنقل', icon: 'home', category: 'الحالة المدنية' },
-  { _id: '2', titleAr: 'رخصة البناء', descriptionAr: 'تقديم طلب الحصول على رخصة البناء أو التوسعة', icon: 'building', category: 'التعمير' },
-  { _id: '3', titleAr: 'خدمات الحالة المدنية', descriptionAr: 'استخراج وثائق الحالة المدنية كعقود الازدياد والزواج', icon: 'users', category: 'الحالة المدنية' },
-  { _id: '4', titleAr: 'الشكاوى والمقترحات', descriptionAr: 'تقديم شكاوى أو مقترحات لتحسين الخدمات البلدية', icon: 'clipboard', category: 'التواصل' },
-  { _id: '5', titleAr: 'تسوية الوضعية الضريبية', descriptionAr: 'الاستفسار عن الوضعية الجبائية وتسوية المستحقات', icon: 'file', category: 'الجباية' },
-  { _id: '6', titleAr: 'رخصة الاستغلال التجاري', descriptionAr: 'طلب رخصة فتح محل تجاري أو تجديدها', icon: 'map', category: 'التعمير' },
-];
+import { FileText, ArrowLeft, Search, Users } from 'lucide-react';
+import { getServicesStore, type Service } from '@/lib/store';
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -29,10 +12,8 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getServices()
-      .then(setServices)
-      .catch(() => setServices(FALLBACK_SERVICES))
-      .finally(() => setLoading(false));
+    setServices(getServicesStore());
+    setLoading(false);
   }, []);
 
   const filtered = services.filter(s =>
