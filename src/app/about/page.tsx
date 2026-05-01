@@ -10,7 +10,7 @@ export default function AboutPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-3">عن بلدية القنيطرة</h1>
-          <p className="text-gray-500 max-w-xl mx-auto">نبذة عن البلدية ورؤيتها ومهامها في خدمة المواطنين</p>
+          <p className="text-gray-500 max-w-xl mx-auto">نبذة عن الجماعة ورؤيتها ومهامها في خدمة المواطنين</p>
         </div>
 
         {/* Intro */}
@@ -18,7 +18,7 @@ export default function AboutPage() {
           <h2 className="text-xl font-bold text-green-800 mb-4">من نحن</h2>
           <p className="text-gray-600 leading-relaxed text-base">
             بلدية القنيطرة هي الجماعة الترابية المسؤولة عن تدبير الشأن المحلي لمدينة القنيطرة، عاصمة جهة الرباط-سلا-القنيطرة.
-            تضطلع البلدية بمهام التنمية المحلية وتقديم الخدمات الإدارية للمواطنين في إطار اللامركزية الإدارية.
+            تضطلع الجماعة بمهام التنمية المحلية وتقديم الخدمات الإدارية للمواطنين في إطار اللامركزية الإدارية.
           </p>
         </div>
 

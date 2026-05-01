@@ -56,7 +56,7 @@ export default function ContactPage() {
           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         <div className="relative max-w-6xl mx-auto px-4 py-16 text-center">
           <span className="inline-block bg-white/15 backdrop-blur-sm text-white text-xs font-medium px-4 py-1.5 rounded-full mb-4 border border-white/20">
-            تواصل مع البلدية
+            تواصل مع الجماعة
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">نحن هنا لخدمتكم</h1>
           <p className="text-green-100 text-lg max-w-xl mx-auto">

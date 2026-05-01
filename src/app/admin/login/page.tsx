@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
             <Lock className="text-white" size={24} />
           </div>
           <h1 className="text-xl font-bold text-gray-900">تسجيل الدخول</h1>
-          <p className="text-sm text-gray-500 mt-1">لوحة إدارة البلدية</p>
+          <p className="text-sm text-gray-500 mt-1">لوحة إدارة الجماعة</p>
         </div>
 
         {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-2.5 rounded-xl mb-4">{error}</div>}

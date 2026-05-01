@@ -25,7 +25,7 @@ export default function ServicesPage() {
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">الخدمات البلدية</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">الخدمات الجماعة</h1>
           <p className="text-gray-500">جميع الخدمات الإدارية في مكان واحد</p>
         </div>
 

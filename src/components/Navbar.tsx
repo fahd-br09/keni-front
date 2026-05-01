@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react';
 
 const links = [
   { href: '/', label: 'الرئيسية' },
-  { href: '/about', label: 'عن البلدية' },
+  { href: '/about', label: 'عن الجماعة' },
   { href: '/services', label: 'الخدمات' },
   { href: '/news', label: 'الأخبار' },
   { href: '/contact', label: 'اتصل بنا' },
@@ -19,8 +19,19 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-green-700 flex items-center justify-center text-white font-bold text-sm">ب</div>
-          <span className="font-bold text-green-800 text-lg hidden sm:block">بلدية القنيطرة</span>
+          <img
+            src="/images/logo.ico"
+            alt="جماعة القنيطرة"
+            className="w-9 h-9 rounded-lg object-contain"
+            onError={e => {
+              const t = e.currentTarget;
+              t.style.display = 'none';
+              const fallback = t.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'flex';
+            }}
+          />
+          <div className="w-9 h-9 rounded-lg bg-green-700 items-center justify-center text-white font-bold text-sm hidden" aria-hidden>ج</div>
+          <span className="font-bold text-green-800 text-lg hidden sm:block">جماعة القنيطرة</span>
         </Link>
 
         {/* Desktop links */}

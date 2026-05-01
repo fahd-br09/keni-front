@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MediaGallery from '@/components/MediaGallery';
+import NewsCarousel from '@/components/NewsCarousel';
 import Link from 'next/link';
 import { FileText, Users, Building2, Phone, ArrowLeft, Star, TrendingUp, Shield } from 'lucide-react';
 
@@ -23,35 +24,11 @@ export default function HomePage() {
     <>
       <Navbar />
       <main>
-        {/* Hero */}
-        <section className="bg-gradient-to-br from-green-800 via-green-700 to-green-600 text-white py-24 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm mb-6 backdrop-blur-sm">
-              <Shield size={14} />
-              <span>الموقع الرسمي لبلدية القنيطرة</span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              خدمات بلدية القنيطرة
-              <span className="block text-green-200 text-3xl md:text-4xl mt-2 font-normal">في متناول يدك</span>
-            </h1>
-            <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-              نقدم لكم خدمات إدارية متكاملة بطريقة سهلة وسريعة. ابدأ طلبك الآن دون الحاجة للتنقل.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/services"
-                className="bg-white text-green-800 px-8 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors flex items-center justify-center gap-2">
-                استعرض الخدمات <ArrowLeft size={16} />
-              </Link>
-              <Link href="/contact"
-                className="border border-white/40 text-white px-8 py-3 rounded-xl font-semibold hover:bg-white/10 transition-colors">
-                تواصل معنا
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* Hero Carousel */}
+        <NewsCarousel />
 
         {/* Stats */}
-        <section className="max-w-7xl mx-auto px-4 -mt-8">
+        <section className="max-w-7xl mx-auto px-4 mt-10 mb-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.map(({ label, value, icon: Icon }) => (
               <div key={label} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
